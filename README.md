@@ -8,7 +8,7 @@ Don't forget to run <code>npm i</code>!
 
 <h2>First steps</h2>
 
-To start the server, type <code>ts-node index.ts</code> in the terminal. The terminal will inform that in order to exit the server you need to press <code>Ctrl + C</code> and that the server is running on http://localhost:8000. Go to Postman and select "New HTTP request".
+To start the server, type <code>npm run start</code> in the terminal. The terminal will inform that in order to exit the server you need to press <code>Ctrl + C</code> and that the server is running on http://localhost:8000. Go to Postman and select "New HTTP request".
 
 <h2>Testing the REST API</h2>
 
