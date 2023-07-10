@@ -18,12 +18,25 @@
 
 import express, { Request, Response } from 'express';
 import fs from 'fs';
+import cors from 'cors';
 
 const app = express();
 const PORT = 8000;
 const FILE_PATH = 'tasques.json';
 
+app.use(cors({
+    origin: 'http://localhost:8000',
+    methods: 'GET,POST,PUT,DELETE',
+    allowedHeaders: 'Content-Type,Authorization', // Permitir solo los encabezados 'Content-Type' y 'Authorization'
+}));
+
 app.use(express.json());
+
+// Middleware para añadir Cache-Control: no-cache
+app.use((_req, res, next) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    next();
+});
 
 interface Task {
     id: number;
@@ -44,7 +57,7 @@ function writeTasksToFile(tasks: Task[]): void {
     fs.writeFileSync(FILE_PATH, JSON.stringify(tasks, null, 2), 'utf-8');
 }
 
-app.get('/tasks', (req: Request, res: Response) => {
+app.get('/tasks', (_req: Request, res: Response) => {
     const tasks = readTasksFromFile();
     res.json(tasks);
 });
@@ -81,7 +94,7 @@ app.delete('/tasks/:id', (req: Request, res: Response) => {
     if (taskIndex !== -1) {
         const deletedTask = tasks.splice(taskIndex, 1);
         writeTasksToFile(tasks);
-        res.json({message: `Task number ${deletedTask} was deleted`});
+        res.json({ message: `Task number ${deletedTask} was deleted` });
     } else {
         res.status(404).json({ message: 'Task not found' });
     }
